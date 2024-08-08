@@ -1,19 +1,19 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
-public class QueueUniqueIdentificatorSystem<Integer, QueuesTopicRegister> {
+public class QueueUniqueIdentificatorSystem<Integer, String> {
     private Integer mainTopicId;
-    private QueuesTopicRegister topicRegistry;
+    private String mainTopicName;
 
-    public QueueUniqueIdentificatorSystem(final Integer id, final QueuesTopicRegister topics) {
+    public QueueUniqueIdentificatorSystem(final Integer id, final String topic) {
         this.mainTopicId = id;
-        this.topicRegistry = topics;
+        this.mainTopicName = topic;
     }
 
     public Integer getMainTopicID() {
         return this.mainTopicId;
     }
 
-    public QueuesTopicRegister getQueuesTopicRegister() {
-        return this.topicRegistry;
+    public String getQueuesTopicRegister() {
+        return this.mainTopicName;
     }
 }
