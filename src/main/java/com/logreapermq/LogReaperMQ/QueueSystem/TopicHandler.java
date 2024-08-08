@@ -45,18 +45,30 @@ public class TopicHandler {
     }
 
     public SystemErrorsBinder addQueue(final String topicName, final String queueName) {
+        SystemErrorsBinder opResult;
         // search for main topic
-        Optional<QueuesManager> manager = this.mainHandler.entrySet().stream()
-            .filter(kv -> kv.getKey().getQueuesTopicRegister().equals(topicName))
-            .map(Map.Entry::getValue)
-            .findFirst();
+        Optional<QueuesManager> manager = this.checkTopicAndGetManager(topicName);
 
         if (manager.isPresent()) {
-            manager.get().addQueue(queueName);
+            opResult = manager.get().addQueue(queueName);
         } else {
             return SystemErrorsBinder.UNKNOWN_TOPIC;
         }
-        return SystemErrorsBinder.OK_STATUS;
+        return opResult;
+    }
+
+    public SystemErrorsBinder deleteQueue(final String topicName, final String queueName) {
+        SystemErrorsBinder opResult;
+
+        // search for the main topic
+        Optional<QueuesManager> manager = this.checkTopicAndGetManager(topicName);
+
+        if (manager.isPresent()) {
+            opResult = manager.get().deleteQueue(queueName);
+        } else {
+            return SystemErrorsBinder.UNKNOWN_TOPIC;
+        }
+        return opResult;
     }
 
     private Integer generateRandomID() throws TooMutchTries {
@@ -76,5 +88,12 @@ public class TopicHandler {
             }
         }
         return id;
+    }
+
+    private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
+        return this.mainHandler.entrySet().stream()
+                .filter(kv -> kv.getKey().getQueuesTopicRegister().equals(topicNameToSearch))
+                .map(Map.Entry::getValue)
+                .findFirst();
     }
 }
