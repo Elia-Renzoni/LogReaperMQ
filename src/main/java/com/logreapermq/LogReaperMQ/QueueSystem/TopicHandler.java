@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -44,7 +45,18 @@ public class TopicHandler {
     }
 
     public SystemErrorsBinder addQueue(final String topicName, final String queueName) {
-        return true;
+        // search for main topic
+        Optional<QueuesManager> manager = this.mainHandler.entrySet().stream()
+            .filter(kv -> kv.getKey().getQueuesTopicRegister().equals(topicName))
+            .map(Map.Entry::getValue)
+            .findFirst();
+
+        if (manager.isPresent()) {
+            manager.get().addQueue(queueName);
+        } else {
+            return SystemErrorsBinder.UNKNOWN_TOPIC;
+        }
+        return SystemErrorsBinder.OK_STATUS;
     }
 
     private Integer generateRandomID() throws TooMutchTries {

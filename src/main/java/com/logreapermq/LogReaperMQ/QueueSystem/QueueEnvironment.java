@@ -12,15 +12,15 @@ public class QueueEnvironment {
         this.queueName = name;
     }
 
-    public void addItem() {
-
+    public void addItem(final String item) {
+        this.queue.add(item);
     }
 
     public String getQueueName() {
         return this.queueName;
     }
     
-    public void deleteItem() {
-
+    public void deleteItem(final String item) {
+        this.queue.remove(item);
     }
 }
