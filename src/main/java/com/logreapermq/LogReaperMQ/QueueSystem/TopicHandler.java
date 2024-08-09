@@ -30,7 +30,7 @@ public class TopicHandler {
         this.idRegister = new HashSet<>();
     }
 
-    public SystemErrorsBinder addNewTopic(final String topicName) {
+    public synchronized SystemErrorsBinder addNewTopic(final String topicName) {
         Integer topicId = 0;
 
         try {
@@ -44,7 +44,7 @@ public class TopicHandler {
         return SystemErrorsBinder.OK_STATUS;
     }
 
-    public SystemErrorsBinder addQueue(final String topicName, final String queueName) {
+    public synchronized SystemErrorsBinder addQueue(final String topicName, final String queueName) {
         SystemErrorsBinder opResult;
         // search for main topic
         Optional<QueuesManager> manager = this.checkTopicAndGetManager(topicName);
@@ -57,7 +57,7 @@ public class TopicHandler {
         return opResult;
     }
 
-    public SystemErrorsBinder deleteQueue(final String topicName, final String queueName) {
+    public synchronized SystemErrorsBinder deleteQueue(final String topicName, final String queueName) {
         SystemErrorsBinder opResult;
 
         // search for the main topic
