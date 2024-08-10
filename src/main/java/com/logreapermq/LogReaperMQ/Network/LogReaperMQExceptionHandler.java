@@ -16,16 +16,22 @@ public class LogReaperMQExceptionHandler {
     
     @ExceptionHandler(TooMutchElements.class)
     public ResponseEntity<Object> handleTooMutchElementException(RuntimeException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.internalServerError()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
     }
     
     @ExceptionHandler(QueueTypeAlreadyExist.class)
     public ResponseEntity<Object> handleQueueTypeAlreadyExistException(RuntimeException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
     }
     
     @ExceptionHandler(InvalidQueueType.class)
     public ResponseEntity<Object> handleInvalidQueueTypeException(RuntimeException ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
     }
 }
