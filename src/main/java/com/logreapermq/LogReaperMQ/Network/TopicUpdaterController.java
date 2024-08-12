@@ -13,10 +13,4 @@ public class TopicUpdaterController {
     public ResponseEntity<Void> updateTopic() {
         return null;
     }
-
-    @PatchMapping("/subtopic")
-    public ResponseEntity<Void> updateSubtopic() {
-        return null;
-    }
-    
 }

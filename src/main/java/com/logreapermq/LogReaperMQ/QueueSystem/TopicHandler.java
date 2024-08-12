@@ -32,6 +32,8 @@ public class TopicHandler {
 
     public synchronized SystemErrorsBinder addNewTopic(final String topicName) {
         Integer topicId = 0;
+        
+        // da controllare se esiste già o meno.
 
         try {
             topicId = this.generateRandomID();
@@ -41,6 +43,20 @@ public class TopicHandler {
 
         this.mainHandler.put(new QueueUniqueIdentificatorSystem<Integer, String>(topicId, topicName), 
                                 new QueuesManager());
+        return SystemErrorsBinder.OK_STATUS;
+    }
+    
+    public synchronized SystemErrorsBinder deleteTopic(final String topicName) {
+        Boolean isTopicPresent = this.mainHandler.entrySet().stream()
+            .map(Map.Entry::getKey)
+            .filter(k -> k.getQueuesTopicRegister().equals(topicName))
+            .anyMatch(null);
+        
+        if (isTopicPresent) {
+            this.mainHandler.remove(topicName);
+        } else {
+            return SystemErrorsBinder.UNKNOWN_TOPIC;
+        }
         return SystemErrorsBinder.OK_STATUS;
     }
 
