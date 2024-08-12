@@ -12,6 +12,7 @@ import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.InvalidQueueType;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTypeAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchElements;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TopicAlreadyExist;
 import com.logreapermq.LogReaperMQ.Wrappers.QueueMakerWrapper;
 import com.logreapermq.LogReaperMQ.Wrappers.TopicMakerWrapper;
 
@@ -28,6 +29,8 @@ public class TopicMakerController {
         SystemErrorsBinder operationResult = queueHolder.addNewTopic(requestBody.getTopic()); 
         if (operationResult == SystemErrorsBinder.TOO_MUCH_ELEMENTS) {
             throw new TooMutchElements("The Topic Handler has too element");
+        } else if (operationResult == SystemErrorsBinder.TOPIC_ALREADY_EXIST) {
+            throw new TopicAlreadyExist("The Topic " + requestBody.getTopic() + " alredy exist in the system");
         }
         return ResponseEntity.ok()
                     .header("Content-Type", "application/json")

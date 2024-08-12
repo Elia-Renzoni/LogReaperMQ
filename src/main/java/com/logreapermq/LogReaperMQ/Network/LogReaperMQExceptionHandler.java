@@ -1,8 +1,6 @@
 package com.logreapermq.LogReaperMQ.Network;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -10,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.InvalidQueueType;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTypeAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchElements;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TopicAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 
@@ -46,6 +45,13 @@ public class LogReaperMQExceptionHandler {
     
     @ExceptionHandler(UnknownQueue.class)
     public ResponseEntity<Object> handleUnknownQueueException(RuntimeException ex, WebRequest request) {
+        return ResponseEntity.badRequest()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(TopicAlreadyExist.class)
+    public ResponseEntity<Object> handleTopicAlreadyExistException(RuntimeException ex, WebRequest request) {
         return ResponseEntity.badRequest()
                 .header("Content-Type", "application/json")
                 .body(ex.getMessage());

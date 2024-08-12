@@ -33,7 +33,11 @@ public class TopicHandler {
     public synchronized SystemErrorsBinder addNewTopic(final String topicName) {
         Integer topicId = 0;
         
-        // da controllare se esiste già o meno.
+        Boolean isTopicAlreadyPresent = this.checkTopicName(topicName);
+        
+        if (isTopicAlreadyPresent) {
+            return SystemErrorsBinder.TOPIC_ALREADY_EXIST;
+        }
 
         try {
             topicId = this.generateRandomID();
@@ -47,10 +51,7 @@ public class TopicHandler {
     }
     
     public synchronized SystemErrorsBinder deleteTopic(final String topicName) {
-        Boolean isTopicPresent = this.mainHandler.entrySet().stream()
-            .map(Map.Entry::getKey)
-            .filter(k -> k.getQueuesTopicRegister().equals(topicName))
-            .anyMatch(null);
+        Boolean isTopicPresent = this.checkTopicName(topicName);
         
         if (isTopicPresent) {
             this.mainHandler.remove(topicName);
@@ -97,6 +98,7 @@ public class TopicHandler {
             }
 
             if (!(this.idRegister.contains(id))) {
+                this.idRegister.add(id);
                 break;
             } else {
                 id = this.rand.nextInt(TopicHandler.MAX_ID);
@@ -111,5 +113,12 @@ public class TopicHandler {
                 .filter(kv -> kv.getKey().getQueuesTopicRegister().equals(topicNameToSearch))
                 .map(Map.Entry::getValue)
                 .findFirst();
+    }
+    
+    private Boolean checkTopicName(final String topicNametoSearch) {
+        return this.mainHandler.entrySet().stream()
+            .map(Map.Entry::getKey)
+            .filter(k -> k.getQueuesTopicRegister().equals(topicNametoSearch))
+            .anyMatch(null);
     }
 }

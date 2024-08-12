@@ -8,5 +8,6 @@ public enum SystemErrorsBinder {
     UNKNOWN_QUEUE,
     INVALID_QUEUE_TYPE,
     QUEUE_TYPE_ALREADY_EXSIT,
-    QUEUE_TOO_HOT;
+    QUEUE_TOO_HOT,
+    TOPIC_ALREADY_EXIST;
 }
