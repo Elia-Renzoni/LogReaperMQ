@@ -1,14 +1,9 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Service;
 
 import com.logreapermq.LogReaperMQ.Security.SubTopicTypes;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
@@ -26,9 +21,7 @@ public class QueuesManager {
             .filter(n -> n.getSubtopicType().equals(queueType))
             .anyMatch(null);
         
-        Boolean isTopicAlreadyExist = this.topicQueues.stream()
-            .filter(n -> n.getQueueName().equals(queueType))
-            .anyMatch(null);
+        Boolean isTopicAlreadyExist = this.checkIfTopicExist(queueType);
         
         if (!(isTypeValid)) {
             return SystemErrorsBinder.INVALID_QUEUE_TYPE;
@@ -43,9 +36,7 @@ public class QueuesManager {
     }
 
     public SystemErrorsBinder deleteQueue(final String queueType) {
-        Boolean isTopicExist = this.topicQueues.stream()
-            .filter(n -> n.getQueueName().equals(queueType))
-            .anyMatch(null);
+        Boolean isTopicExist = this.checkIfTopicExist(queueType);
         
         if (!(isTopicExist)) {
             return SystemErrorsBinder.UNKNOWN_QUEUE;
@@ -55,4 +46,9 @@ public class QueuesManager {
         return SystemErrorsBinder.OK_STATUS;
     }
     
+    private Boolean checkIfTopicExist(final String queueType) {
+        return this.topicQueues.stream()
+            .filter(n -> n.getQueueName().equals(queueType))
+            .anyMatch(null);
+    }    
 }

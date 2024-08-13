@@ -38,7 +38,7 @@ public class TopicMakerController {
     }
 
     @PostMapping("/queue")
-    public ResponseEntity<Object> createSubtopic(@Valid @RequestBody QueueMakerWrapper requestBody) throws RuntimeException {
+    public ResponseEntity<Object> createQueue(@Valid @RequestBody QueueMakerWrapper requestBody) throws RuntimeException {
         SystemErrorsBinder operationResult = queueHolder.addQueue(requestBody.getTopic(), requestBody.getQueue());
         if (operationResult == SystemErrorsBinder.INVALID_QUEUE_TYPE) {
             throw new InvalidQueueType("The Queue Type Is Not Valid for the System");
