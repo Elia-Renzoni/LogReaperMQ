@@ -16,7 +16,7 @@ import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 @Service
 @Scope("singleton")
 public class TopicHandler {
-    private Map<QueueUniqueIdentificatorSystem, QueuesManager> mainHandler;
+    private Map<String, QueuesManager> mainHandler;
 
     public TopicHandler() {
         this.mainHandler = new HashMap<>();
@@ -29,8 +29,7 @@ public class TopicHandler {
             return SystemErrorsBinder.TOPIC_ALREADY_EXIST;
         }
 
-        this.mainHandler.put(new QueueUniqueIdentificatorSystem<String>(topicName), 
-                                new QueuesManager());
+        this.mainHandler.put(topicName, new QueuesManager());
         return SystemErrorsBinder.OK_STATUS;
     }
     
@@ -72,13 +71,13 @@ public class TopicHandler {
         return opResult;
     }
 
-    public synchronized Map<QueueUniqueIdentificatorSystem, QueuesManager> getTopicHandler() {
+    public synchronized Map<String, QueuesManager> getTopicHandler() {
         return this.mainHandler;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
         return this.mainHandler.entrySet().stream()
-                .filter(kv -> kv.getKey().getMainTopicID().equals(topicNameToSearch))
+                .filter(kv -> kv.getKey().equals(topicNameToSearch))
                 .map(Map.Entry::getValue)
                 .findFirst();
     }
@@ -86,7 +85,7 @@ public class TopicHandler {
     private Boolean checkTopicName(final String topicNametoSearch) {
         return this.mainHandler.entrySet().stream()
             .map(Map.Entry::getKey)
-            .filter(k -> k.getMainTopicID().equals(topicNametoSearch))
+            .filter(k -> k.equals(topicNametoSearch))
             .anyMatch(null);
     }
 }

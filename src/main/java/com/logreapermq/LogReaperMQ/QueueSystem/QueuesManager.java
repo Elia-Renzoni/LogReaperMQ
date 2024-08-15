@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import com.logreapermq.LogReaperMQ.Security.SubTopicTypes;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueeTooHot;
 
 public class QueuesManager {
     private Set<QueueEnvironment> topicQueues;
@@ -44,6 +45,10 @@ public class QueuesManager {
 
         this.topicQueues.removeIf(n -> n.getQueueName().equals(queueType));
         return SystemErrorsBinder.OK_STATUS;
+    }
+
+    public Set<QueueEnvironment> getTopicQueues() {
+        return this.topicQueues;
     }
     
     private Boolean checkIfTopicExist(final String queueType) {
