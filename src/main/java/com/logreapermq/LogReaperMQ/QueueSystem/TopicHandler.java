@@ -7,11 +7,14 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 
 @Service
+@Scope("singleton")
 public class TopicHandler {
     private Map<QueueUniqueIdentificatorSystem, QueuesManager> mainHandler;
 
@@ -67,6 +70,10 @@ public class TopicHandler {
             return SystemErrorsBinder.UNKNOWN_TOPIC;
         }
         return opResult;
+    }
+
+    public synchronized Map<QueueUniqueIdentificatorSystem, QueuesManager> getTopicHandler() {
+        return this.mainHandler;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
