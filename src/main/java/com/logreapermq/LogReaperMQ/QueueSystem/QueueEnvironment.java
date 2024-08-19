@@ -8,7 +8,7 @@ import java.util.Set;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 
 public class QueueEnvironment {
-    private Set<String> queue;
+    private Set<Message> queue;
     private Boolean dirtyBit;
     private String queueName;
 
@@ -26,7 +26,7 @@ public class QueueEnvironment {
         if (this.queue.contains(item)) {
             return SystemErrorsBinder.ITEM_ALREADY_EXIST;
         }
-        this.queue.add(item);
+        this.queue.add(new Message(item));
         return SystemErrorsBinder.OK_STATUS;
     }
 
@@ -34,7 +34,7 @@ public class QueueEnvironment {
         return this.queueName;
     }
 
-    public Set<String> getMessageQueue() {
+    public Set<Message> getMessageQueue() {
         return this.queue;
     }
     
@@ -49,7 +49,7 @@ public class QueueEnvironment {
     public Long getQueueMemoryDimension() {
         Long dimension = 0L;
         for (var item : this.queue) {
-            var itemBytes = item.getBytes(Charset.defaultCharset());
+            var itemBytes = item.getMessage().getBytes(Charset.defaultCharset());
             dimension += itemBytes.length;
         }
         return dimension;
