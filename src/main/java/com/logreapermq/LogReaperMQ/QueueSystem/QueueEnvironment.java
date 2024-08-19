@@ -1,5 +1,6 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,14 @@ public class QueueEnvironment {
     public QueueEnvironment(final String name) {
         this.queue = new HashSet<>();
         this.queueName = name;
+        this.dirtyBit = true;
     }
 
     public SystemErrorsBinder addItem(final String item) {
+        if (!(this.dirtyBit)) {
+            return SystemErrorsBinder.QUEUE_TOO_HOT;
+        }
+
         if (this.queue.contains(item)) {
             return SystemErrorsBinder.ITEM_ALREADY_EXIST;
         }
@@ -40,14 +46,13 @@ public class QueueEnvironment {
         return SystemErrorsBinder.OK_STATUS;
     }
 
-    public Integer getQueueMemoryDimension() {
-        Integer queueDimension;
-
+    public Long getQueueMemoryDimension() {
+        Long dimension = 0L;
         for (var item : this.queue) {
-            queueDimension += item.getBytes(Charset.defaultCharset());
+            var itemBytes = item.getBytes(Charset.defaultCharset());
+            dimension += itemBytes.length;
         }
-
-        return queueDimension;
+        return dimension;
     }
 
     public void setDirtyBitToFalse() {

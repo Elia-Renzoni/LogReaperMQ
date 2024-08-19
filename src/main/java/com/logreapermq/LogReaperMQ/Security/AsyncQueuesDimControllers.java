@@ -9,6 +9,7 @@ import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 
 @EnableAsync
 public class AsyncQueuesDimControllers {
+    private final static Long MAX_DIM = 5_000_000L; 
     
     @Async
     public void checkQueueDimension(final String topic, Map<String, QueuesManager> queueHandler) {
@@ -17,6 +18,7 @@ public class AsyncQueuesDimControllers {
             .map(Map.Entry::getValue);
         
         manager.getTopicQueues().stream()
-            .filter(q -> q.getMessageQueue().size() )
+            .filter(q -> q.getQueueMemoryDimension() >= AsyncQueuesDimControllers.MAX_DIM)
+            .forEach(q -> q.setDirtyBitToFalse());
     }
 }

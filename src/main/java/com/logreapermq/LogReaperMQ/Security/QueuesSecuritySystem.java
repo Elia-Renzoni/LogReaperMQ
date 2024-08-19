@@ -17,15 +17,18 @@ import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 public class QueuesSecuritySystem {
     @Autowired
     private TopicHandler topicManager;
+    @Autowired
+    private AsyncQueuesDimControllers asyncQueueController;
 
-    @Scheduled(fixedRate = 3000)
-    public SystemErrorsBinder checkQueuesDimension() {
+    @Scheduled(fixedRate = 10000)
+    public void checkQueuesDimension() {
         Map<String, QueuesManager> topicHandler = topicManager.getTopicHandler();
         List<String> topics = topicHandler.entrySet().stream()
             .map(Map.Entry::getKey)
             .collect(Collectors.toList());
-        return null;
+        
+        for (var topicToCheck : topics) {
+            asyncQueueController.checkQueueDimension(topicToCheck, topicHandler);
+        }
     }
-
-
 }
