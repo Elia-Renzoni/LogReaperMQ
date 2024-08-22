@@ -85,7 +85,6 @@ public class TopicHandler {
     private Boolean checkTopicName(final String topicNametoSearch) {
         return this.mainHandler.entrySet().stream()
             .map(Map.Entry::getKey)
-            .filter(k -> k.equals(topicNametoSearch))
-            .anyMatch(null);
+            .anyMatch(k -> k.contains(topicNametoSearch));
     }
 }
