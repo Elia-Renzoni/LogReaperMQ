@@ -37,7 +37,7 @@ public class TopicMakerController {
                     .body("The topic" + requestBody.getTopic() + " has been created succesfully");
     }
 
-    @PostMapping("/queue")
+    @PostMapping(value = "/queue", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> createQueue(@Valid @RequestBody QueueMakerWrapper requestBody) throws RuntimeException {
         SystemErrorsBinder operationResult = queueHolder.addQueue(requestBody.getTopic(), requestBody.getQueue());
         if (operationResult == SystemErrorsBinder.INVALID_QUEUE_TYPE) {

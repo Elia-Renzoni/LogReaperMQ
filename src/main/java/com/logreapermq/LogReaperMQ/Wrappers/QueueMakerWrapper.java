@@ -1,16 +1,20 @@
 package com.logreapermq.LogReaperMQ.Wrappers;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class QueueMakerWrapper {
     private String topic;
     private String queue;
+
+    @JsonCreator
+    public QueueMakerWrapper(@JsonProperty("topic") String topic, @JsonProperty("queue") String queue) {
+        this.topic = topic;
+        this.queue = queue;
+    }
 }
