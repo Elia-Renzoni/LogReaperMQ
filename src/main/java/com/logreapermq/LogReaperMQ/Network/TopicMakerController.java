@@ -24,7 +24,7 @@ public class TopicMakerController {
     @Autowired
     private TopicHandler queueHolder;
     
-    @PostMapping("/topic")
+    @PostMapping(value = "/topic", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> createTopic(@Valid @RequestBody TopicMakerWrapper requestBody) throws RuntimeException {
         SystemErrorsBinder operationResult = queueHolder.addNewTopic(requestBody.getTopic()); 
         if (operationResult == SystemErrorsBinder.TOO_MUCH_ELEMENTS) {
