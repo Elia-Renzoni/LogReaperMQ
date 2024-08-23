@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import com.logreapermq.LogReaperMQ.Security.SubTopicTypes;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
-import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueeTooHot;
 
 public class QueuesManager {
     private Set<QueueEnvironment> topicQueues;

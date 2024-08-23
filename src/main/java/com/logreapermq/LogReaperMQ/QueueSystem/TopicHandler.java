@@ -1,13 +1,9 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
 
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 

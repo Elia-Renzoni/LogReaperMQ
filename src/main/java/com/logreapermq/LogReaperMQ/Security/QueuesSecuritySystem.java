@@ -5,11 +5,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.logreapermq.LogReaperMQ.QueueSystem.QueueUniqueIdentificatorSystem;
 import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 
