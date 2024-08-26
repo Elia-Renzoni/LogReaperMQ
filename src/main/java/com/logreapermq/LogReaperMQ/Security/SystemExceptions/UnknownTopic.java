@@ -10,5 +10,4 @@ public class UnknownTopic extends RuntimeException {
         super(message);
         this.message = message;
     }
-    
 }

@@ -10,5 +10,4 @@ public class UnknownQueue extends RuntimeException {
         super(message);
         this.message = message;
     }
-    
 }

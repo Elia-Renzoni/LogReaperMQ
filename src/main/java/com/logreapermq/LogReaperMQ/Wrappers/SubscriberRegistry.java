@@ -4,10 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Getter
 @Setter
-@AllArgsConstructor
 public class SubscriberRegistry {
-    private String topic;
-    private String queueName;
+    private String subscriberInfo;
+    private List<String> topics;
+    private List<String> queues;
+    
+    @JsonCreator
+    public SubscriberRegistry(@JsonProperty("id") String subscriberInfo, 
+                              @JsonProperty("topics") List<String> topics, 
+                              @JsonProperty("queues") List<String> queues) {
+        this.subscriberInfo = subscriberInfo;
+        this.topics = List.copyOf(topics);
+        this.queues = List.copyOf(queues);
+    }
 }

@@ -3,6 +3,8 @@ package com.logreapermq.LogReaperMQ.QueueSystem;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -69,6 +71,38 @@ public class TopicHandler {
 
     public synchronized Map<String, QueuesManager> getTopicHandler() {
         return this.mainHandler;
+    }
+    
+    public synchronized SystemErrorsBinder checkTopicsForSubscribers(List<String> topics) {
+        Boolean result = true;
+        for (String topic : topics) {
+            result = this.mainHandler.entrySet().stream()
+                .map(Map.Entry::getKey)
+                .anyMatch(t -> t.contains(topic));
+            
+            if (!(result)) {
+                return SystemErrorsBinder.UNKNOWN_TOPIC; 
+            }
+        }
+        return SystemErrorsBinder.OK_STATUS;
+    }
+    
+    public synchronized SystemErrorsBinder checkQueuesForSubscribers(List<String> queues) {
+        Boolean result = true;
+        for (String queue : queues) {
+            for (var q : this.mainHandler.values()) {
+                for (var l : q.getTopicQueues()) {
+                    if (l.getQueueName() != queue) {
+                        result = false;
+                    }
+                }
+            }
+
+            if (!(result)) {
+                return SystemErrorsBinder.UNKNOWN_QUEUE;
+            }
+        }
+        return SystemErrorsBinder.OK_STATUS;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
