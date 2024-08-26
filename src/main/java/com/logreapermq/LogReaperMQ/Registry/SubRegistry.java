@@ -29,7 +29,7 @@ public class SubRegistry {
     public synchronized Tuple<SystemErrorsBinder, Integer> entry(final String subId, final List<String> topics, final List<String> queues) {
         // check potential errors.
         SystemErrorsBinder topicOp = handler.checkTopicsForSubscribers(topics);
-        SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(queues);
+        SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(topics, queues);
 
         if (topicOp != SystemErrorsBinder.OK_STATUS) {
            return new Tuple<>(topicOp, null); 

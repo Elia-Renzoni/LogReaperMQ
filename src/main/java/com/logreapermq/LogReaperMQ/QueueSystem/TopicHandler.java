@@ -87,21 +87,24 @@ public class TopicHandler {
         return SystemErrorsBinder.OK_STATUS;
     }
     
-    public synchronized SystemErrorsBinder checkQueuesForSubscribers(List<String> queues) {
-        Boolean result = true;
-        for (String queue : queues) {
-            for (var q : this.mainHandler.values()) {
-                for (var l : q.getTopicQueues()) {
-                    if (l.getQueueName() != queue) {
-                        result = false;
+    public synchronized SystemErrorsBinder checkQueuesForSubscribers(List<String> topics, List<String> queues) {
+        Integer successCounter = 0; 
+        
+        for (String topic : topics) {
+            QueuesManager entry = this.mainHandler.get(topic);
+            for (String queue : queues) {
+                for (var q : entry.getTopicQueues()) {
+                    if (q.getQueueName().equals(queue)) {
+                        ++successCounter;
                     }
                 }
             }
-
-            if (!(result)) {
-                return SystemErrorsBinder.UNKNOWN_QUEUE;
-            }
         }
+
+        if (!(successCounter == queues.size())) {
+            return SystemErrorsBinder.UNKNOWN_QUEUE;
+        }
+        
         return SystemErrorsBinder.OK_STATUS;
     }
 
