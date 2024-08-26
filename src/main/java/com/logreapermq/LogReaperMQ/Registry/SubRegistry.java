@@ -1,6 +1,7 @@
 package com.logreapermq.LogReaperMQ.Registry;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -10,13 +11,14 @@ import java.util.List;
 
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
 
 import java.util.HashMap;
 
 @Service
-@Scope("sigleton")
+@Scope("singleton")
 public class SubRegistry {
-    private Map<String, Registry> subcribersCallBack;
+    private Map<Subscriber, Registry> subcribersCallBack;
     @Autowired
     private TopicHandler handler;
 
@@ -24,42 +26,52 @@ public class SubRegistry {
         this.subcribersCallBack = new HashMap<>();
     }
     
-    public SystemErrorsBinder entry(final String subId, final List<String> topics, final List<String> queues) {
+    public synchronized Tuple<SystemErrorsBinder, Integer> entry(final String subId, final List<String> topics, final List<String> queues) {
         // check potential errors.
         SystemErrorsBinder topicOp = handler.checkTopicsForSubscribers(topics);
         SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(queues);
 
         if (topicOp != SystemErrorsBinder.OK_STATUS) {
-           return topicOp; 
+           return new Tuple<>(topicOp, null); 
         }
 
         if (queueOp != SystemErrorsBinder.OK_STATUS) {
-            return queueOp;
+            return new Tuple<>(queueOp, null);
         }
 
-        this.subcribersCallBack.put(subId, new Registry(topics, queues));
+        Subscriber newSubscriber;
+        Integer Id;
+        try {
+            newSubscriber = new Subscriber(subId);
+            Id = newSubscriber.getId();
+        } catch (TooMutchTries e) {
+            return new Tuple<>(SystemErrorsBinder.TOO_MUTCH_TRIES, null);
+        }
 
-        return SystemErrorsBinder.OK_STATUS;
+        this.subcribersCallBack.put(newSubscriber, new Registry(topics, queues));
+
+        return new Tuple<>(SystemErrorsBinder.OK_STATUS, Id);
     }
     
-    public SystemErrorsBinder deleteEntry(final String topic, final String queue) {
+    // delete subscriber from a topic.
+    public synchronized SystemErrorsBinder deleteEntry(final Integer id) {
+        Optional<Subscriber> toDelete = this.subcribersCallBack.entrySet().stream()
+            .map(Map.Entry::getKey)
+            .filter(k -> k.getId() == id)
+            .findFirst();
 
-        if (!(queue.isEmpty())) {
-            SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(List.of(queue));
-            if (queueOp != SystemErrorsBinder.OK_STATUS) {
-                return queueOp;
-            }
+        if (toDelete.isEmpty()) {
+            return SystemErrorsBinder.UNKNOWN_ITEM;
         }
-
-        SystemErrorsBinder topicOp = handler.checkTopicsForSubscribers(List.of(queue));
-        
-        if (topicOp != SystemErrorsBinder.OK_STATUS) {
-            return topicOp;
-        }
-
-        // TODO
-        this.subcribersCallBack.remove();
+        this.subcribersCallBack.remove(toDelete.get());
 
         return SystemErrorsBinder.OK_STATUS;
     }
+
+    // delete a queue
+    public synchronized SystemErrorsBinder deleteQueue(final Integer id, final String queue) {
+        return SystemErrorsBinder.OK_STATUS;
+    }
+
+    
 }

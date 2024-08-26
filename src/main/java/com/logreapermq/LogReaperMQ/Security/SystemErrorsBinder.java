@@ -11,5 +11,6 @@ public enum SystemErrorsBinder {
     QUEUE_TOO_HOT,
     TOPIC_ALREADY_EXIST,
     ITEM_ALREADY_EXIST,
-    UNKNOWN_ITEM;
+    UNKNOWN_ITEM,
+    TOO_MUTCH_TRIES;
 }

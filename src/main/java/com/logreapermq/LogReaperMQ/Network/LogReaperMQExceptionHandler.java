@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.InvalidQueueType;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTypeAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchElements;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TopicAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
@@ -53,6 +54,13 @@ public class LogReaperMQExceptionHandler {
     @ExceptionHandler(TopicAlreadyExist.class)
     public ResponseEntity<Object> handleTopicAlreadyExistException(RuntimeException ex, WebRequest request) {
         return ResponseEntity.badRequest()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TooMutchTries.class)
+    public ResponseEntity<Object> handleTooMutchTries(RuntimeException ex, WebRequest request) {
+        return ResponseEntity.internalServerError()
                 .header("Content-Type", "application/json")
                 .body(ex.getMessage());
     }
