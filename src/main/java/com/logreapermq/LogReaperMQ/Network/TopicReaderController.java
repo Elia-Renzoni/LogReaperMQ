@@ -13,6 +13,7 @@ import com.logreapermq.LogReaperMQ.Registry.SubRegistry;
 import com.logreapermq.LogReaperMQ.Registry.Tuple;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownItem;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 import com.logreapermq.LogReaperMQ.Wrappers.SubscriberRegistry;
@@ -41,13 +42,23 @@ public class TopicReaderController {
                 .body(op.getID());
     }
     
-    @DeleteMapping("/deregister/{id}/{topic}")
-    public ResponseEntity<Void> deregisterFromTopic(@PathVariable Integer id, @PathVariable String topicName) throws RuntimeException {
+    @DeleteMapping("/deregister/{id}")
+    public ResponseEntity<Void> deregisterFromTopic(@PathVariable Integer id) throws RuntimeException {
+        SystemErrorsBinder op = registrer.deleteEntry(id);
+        if (op == SystemErrorsBinder.UNKNOWN_ITEM) {
+            throw new UnknownItem("Unknown Subscriber!");
+        }
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/deregister/{id}/{topic}/{queue}")
-    public ResponseEntity<Void> deregisterFromQueue(@PathVariable Integer id, @PathVariable String topicName, @PathVariable String queueName) throws RuntimeException {
+    @DeleteMapping("/deregister/{id}/{queue}")
+    public ResponseEntity<Void> deregisterFromQueue(@PathVariable Integer id, @PathVariable String queueName) throws RuntimeException {
+        SystemErrorsBinder op = registrer.deleteQueue(id, queueName);
+        if (op == SystemErrorsBinder.UNKNOWN_ITEM) {
+            throw new UnknownItem("Unknown Subscriber!");
+        } else if (op == SystemErrorsBinder.UNKNOWN_QUEUE) {
+            throw new UnknownQueue("The Queue " + queueName + " is unknowned to the system!");
+        }
         return ResponseEntity.noContent().build();
     }
 }

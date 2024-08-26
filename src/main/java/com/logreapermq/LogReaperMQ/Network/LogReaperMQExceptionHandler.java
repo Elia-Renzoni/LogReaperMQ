@@ -10,6 +10,7 @@ import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTypeAlreadyExi
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchElements;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TopicAlreadyExist;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownItem;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 
@@ -59,8 +60,15 @@ public class LogReaperMQExceptionHandler {
     }
 
     @ExceptionHandler(TooMutchTries.class)
-    public ResponseEntity<Object> handleTooMutchTries(RuntimeException ex, WebRequest request) {
+    public ResponseEntity<Object> handleTooMutchTriesException(RuntimeException ex, WebRequest request) {
         return ResponseEntity.internalServerError()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(UnknownItem.class)
+    public ResponseEntity<Object> handleUnknownItemException(RuntimeException ex, WebRequest request) {
+        return ResponseEntity.badRequest()
                 .header("Content-Type", "application/json")
                 .body(ex.getMessage());
     }

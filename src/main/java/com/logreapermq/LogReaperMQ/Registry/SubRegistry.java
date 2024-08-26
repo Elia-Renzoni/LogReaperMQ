@@ -70,7 +70,24 @@ public class SubRegistry {
 
     // delete a queue
     public synchronized SystemErrorsBinder deleteQueue(final Integer id, final String queue) {
-        return SystemErrorsBinder.OK_STATUS;
+        Optional<Subscriber> subscriber = this.subcribersCallBack.entrySet().stream()
+                .map(Map.Entry::getKey)
+                .filter(k -> k.getId() == id)
+                .findFirst();
+
+        if (subscriber.isEmpty()) {
+            return SystemErrorsBinder.UNKNOWN_ITEM;
+        }
+
+        for (var kv : this.subcribersCallBack.entrySet()) {
+            if (kv.getKey().getId() == id) {
+                if (kv.getValue().getQueues().remove(queue)) {
+                    return SystemErrorsBinder.OK_STATUS;
+                }
+            }
+        }
+
+        return SystemErrorsBinder.UNKNOWN_QUEUE;
     }
 
     
