@@ -1,6 +1,5 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +21,8 @@ public class QueueEnvironment {
         if (!(this.dirtyBit)) {
             return SystemErrorsBinder.QUEUE_TOO_HOT;
         }
-
-        if (this.queue.contains(item)) {
-            return SystemErrorsBinder.ITEM_ALREADY_EXIST;
-        }
-        this.queue.add(new Message(item));
+        
+        this.queue.add(new Message(item, true));
         return SystemErrorsBinder.OK_STATUS;
     }
 
@@ -39,10 +35,23 @@ public class QueueEnvironment {
     }
     
     public SystemErrorsBinder deleteItem(final String item) {
-        if (!(this.queue.contains(item))) {
-            return SystemErrorsBinder.UNKNOWN_ITEM; 
+        Boolean op = this.queue.stream()
+            .anyMatch(n -> n.getMessage().equals(item));
+        
+        if (!(op)) {
+            return SystemErrorsBinder.UNKNOWN_ITEM;
         }
-        this.queue.remove(item);
+        
+        Message msg = null;
+        
+        for (Message m : this.queue) {
+            if (m.getMessage().equals(item)) {
+                msg = m;
+                break;
+            }
+        }
+        
+        this.queue.remove(msg);
         return SystemErrorsBinder.OK_STATUS;
     }
 

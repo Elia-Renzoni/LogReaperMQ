@@ -3,7 +3,6 @@ package com.logreapermq.LogReaperMQ.Registry;
 import java.util.List;
 import java.util.Random;
 
-import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
 
 public class Subscriber {
