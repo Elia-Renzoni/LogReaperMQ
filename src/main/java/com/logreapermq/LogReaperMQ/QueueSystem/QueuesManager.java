@@ -46,6 +46,23 @@ public class QueuesManager {
         return SystemErrorsBinder.OK_STATUS;
     }
 
+    public Tuple<Boolean, QueueEnvironment> searchQueue(final String queue) {
+        Boolean result = this.checkIfTopicExist(queue);
+        QueueEnvironment queueType = null;
+
+        if (!(result)) {
+            return new Tuple<Boolean,QueueEnvironment>(result, queueType);
+        }
+
+        for (var q : this.topicQueues) {
+            if (q.getQueueName().equals(queue)) {
+                queueType = q;
+            } 
+        }
+
+        return new Tuple<Boolean,QueueEnvironment>(result, queueType);
+    }
+
     public Set<QueueEnvironment> getTopicQueues() {
         return this.topicQueues;
     }

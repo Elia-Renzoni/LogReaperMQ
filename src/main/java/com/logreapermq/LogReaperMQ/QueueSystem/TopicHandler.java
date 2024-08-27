@@ -3,6 +3,7 @@ package com.logreapermq.LogReaperMQ.QueueSystem;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
@@ -105,6 +106,23 @@ public class TopicHandler {
         }
         
         return SystemErrorsBinder.OK_STATUS;
+    }
+    
+    public synchronized SystemErrorsBinder addLog(String topic, String queue, String log) {
+        Optional<QueuesManager> manager = this.checkTopicAndGetManager(topic);
+        SystemErrorsBinder opResult;
+        
+        if (manager.isPresent()) {
+            Tuple<Boolean, QueueEnvironment> isQueuePresent = manager.get().searchQueue(queue);
+            if (!(isQueuePresent.getOpResult())) {
+                return SystemErrorsBinder.UNKNOWN_QUEUE;
+            }
+            opResult = isQueuePresent.getAssociateQueue().addItem(log);
+        } else {
+            return SystemErrorsBinder.UNKNOWN_TOPIC;
+        }
+
+        return opResult;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {

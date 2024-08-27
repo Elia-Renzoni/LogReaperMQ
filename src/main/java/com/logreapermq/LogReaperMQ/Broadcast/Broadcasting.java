@@ -10,6 +10,7 @@ public class Broadcasting {
     
     @Scheduled(fixedRate = 2000)
     public SystemErrorsBinder broadcast() { 
+        
        return SystemErrorsBinder.OK_STATUS; 
     }
     
