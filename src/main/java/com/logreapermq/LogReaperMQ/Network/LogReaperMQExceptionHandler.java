@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.InvalidQueueType;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTooHot;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTypeAlreadyExist;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchElements;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
@@ -69,6 +70,13 @@ public class LogReaperMQExceptionHandler {
     @ExceptionHandler(UnknownItem.class)
     public ResponseEntity<Object> handleUnknownItemException(RuntimeException ex, WebRequest request) {
         return ResponseEntity.badRequest()
+                .header("Content-Type", "application/json")
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(QueueTooHot.class)
+    public ResponseEntity<Object> handleQueueTooHotException(RuntimeException ex, WebRequest request) {
+        return ResponseEntity.internalServerError()
                 .header("Content-Type", "application/json")
                 .body(ex.getMessage());
     }

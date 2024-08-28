@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.QueueTooHot;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
+import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 import com.logreapermq.LogReaperMQ.Wrappers.LogMessage;
 
 @RestController
@@ -17,9 +20,16 @@ public class LogReceiverController {
     @Autowired
     private TopicHandler handler;
     
-    @PostMapping(path = "/send", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> logMessage(@RequestBody LogMessage message) {
+    @PostMapping(path = "/send", consumes = "application/json")
+    public ResponseEntity<Void> logMessage(@RequestBody LogMessage message) throws RuntimeException {
         SystemErrorsBinder op = handler.addLog(message.getTopic(), message.getQueue(), message.getMessage());
+        if (op == SystemErrorsBinder.UNKNOWN_QUEUE) {
+            throw new UnknownQueue("Unknown Queue!");
+        } else if (op == SystemErrorsBinder.UNKNOWN_TOPIC) {
+            throw new UnknownTopic("Unknown Topic!");
+        } else if (op == SystemErrorsBinder.QUEUE_TOO_HOT) {
+            throw new QueueTooHot("Queue full of messages");
+        }
         return ResponseEntity.ok().build();
     }
     
