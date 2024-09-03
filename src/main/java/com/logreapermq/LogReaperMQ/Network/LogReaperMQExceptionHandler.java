@@ -15,6 +15,13 @@ import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownItem;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 
+
+// exception handler Spring Controller
+// the Controller handle the exeption throwed
+// by the RestController in case of errors.
+// the status code in the responses are 
+// mostly 404 and 500.
+
 @ControllerAdvice
 public class LogReaperMQExceptionHandler {
     

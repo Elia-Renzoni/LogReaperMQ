@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class LogMessage {
+public class LogMessageWrapper {
     private String message;
     private String topic;
     private String queue;
 
     @JsonCreator
-    public LogMessage(@JsonProperty("message") String msg, 
+    public LogMessageWrapper(@JsonProperty("message") String msg, 
                       @JsonProperty("topic") String topic, 
                       @JsonProperty("queue") String queue) {
         this.message = msg;

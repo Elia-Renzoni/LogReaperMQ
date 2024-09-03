@@ -12,6 +12,9 @@ import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownQueue;
 import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 
+// this RestController Manages the deletion of 
+// queues and topics by publishers
+
 @RestController
 @RequestMapping(path = "reapermq/breaker")
 public class TopicReaperController {

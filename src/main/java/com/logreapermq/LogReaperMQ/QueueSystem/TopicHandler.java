@@ -41,12 +41,12 @@ public class TopicHandler {
         return SystemErrorsBinder.OK_STATUS;
     }
 
-    public synchronized SystemErrorsBinder addQueue(final String topicName, final String queueName) {
+     public synchronized SystemErrorsBinder addQueue(final String topicName, final String queueName) {
         SystemErrorsBinder opResult;
         // search for main topic
         Optional<QueuesManager> manager = this.checkTopicAndGetManager(topicName);
 
-        if (manager.isPresent()) {
+        if (!(manager.isEmpty())) {
             opResult = manager.get().addQueue(queueName);
         } else {
             return SystemErrorsBinder.UNKNOWN_TOPIC;
@@ -60,7 +60,7 @@ public class TopicHandler {
         // search for the main topic
         Optional<QueuesManager> manager = this.checkTopicAndGetManager(topicName);
 
-        if (manager.isPresent()) {
+        if (!(manager.isEmpty())) {
             opResult = manager.get().deleteQueue(queueName);
         } else {
             return SystemErrorsBinder.UNKNOWN_TOPIC;
@@ -125,10 +125,11 @@ public class TopicHandler {
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
-        return this.mainHandler.entrySet().stream()
-                .filter(kv -> kv.getKey().equals(topicNameToSearch))
-                .map(Map.Entry::getValue)
-                .findFirst();
+        if (this.mainHandler.containsKey(topicNameToSearch)) {
+            return Optional.of(this.mainHandler.get(topicNameToSearch));
+        } else {
+            return Optional.empty();
+        }  
     }
     
     private Boolean checkTopicName(final String topicNametoSearch) {

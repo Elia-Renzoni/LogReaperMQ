@@ -18,8 +18,7 @@ public class QueuesManager {
     public SystemErrorsBinder addQueue(final String queueType) {
         // check if the queue type is valid.
         Boolean isTypeValid = Stream.of(SubTopicTypes.values())
-            .filter(n -> n.getSubtopicType().equals(queueType))
-            .anyMatch(null);
+            .anyMatch(n -> n.getSubtopicType().equals(queueType));
         
         Boolean isTopicAlreadyExist = this.checkIfTopicExist(queueType);
         
@@ -27,7 +26,7 @@ public class QueuesManager {
             return SystemErrorsBinder.INVALID_QUEUE_TYPE;
         }
 
-        if (!(isTopicAlreadyExist)) {
+        if (isTopicAlreadyExist) {
             return SystemErrorsBinder.QUEUE_TYPE_ALREADY_EXSIT;
         }
 
@@ -69,7 +68,6 @@ public class QueuesManager {
     
     private Boolean checkIfTopicExist(final String queueType) {
         return this.topicQueues.stream()
-            .filter(n -> n.getQueueName().equals(queueType))
-            .anyMatch(null);
+            .anyMatch(n -> n.getQueueName().equals(queueType));
     }    
 }
