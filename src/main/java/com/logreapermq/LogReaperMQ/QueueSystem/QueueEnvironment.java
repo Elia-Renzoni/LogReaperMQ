@@ -6,9 +6,19 @@ import java.util.Set;
 
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 
+// this class manage the log queues
+
 public class QueueEnvironment {
+    // quque of logs
     private Set<Message> queue;
+
+    // is a flag indicating whether new messages 
+    // can be added to the queue or not
+    // dirtyBit -> true = new messages can be added
+    // dirtyBit -> false = the queue is full of messages
     private Boolean dirtyBit;
+    
+    // queue name. The names must be identical to those given by SubTopicTypes
     private String queueName;
 
     public QueueEnvironment(final String name) {
@@ -17,6 +27,9 @@ public class QueueEnvironment {
         this.dirtyBit = true;
     }
 
+    // method to add new logs to the queue
+    // @return execution result of the operation
+    // @param log to add
     public SystemErrorsBinder addItem(final String item) {
         if (!(this.dirtyBit)) {
             return SystemErrorsBinder.QUEUE_TOO_HOT;
@@ -34,7 +47,12 @@ public class QueueEnvironment {
         return this.queue;
     }
     
+    // method to delete a log message
+    // @return execution result
+    // @param log to delete
     public SystemErrorsBinder deleteItem(final String item) {
+        
+        // check if the log message exist in the queue
         Boolean op = this.queue.stream()
             .anyMatch(n -> n.getMessage().equals(item));
         
@@ -44,6 +62,7 @@ public class QueueEnvironment {
         
         Message msg = null;
         
+        // return the message to delete
         for (Message m : this.queue) {
             if (m.getMessage().equals(item)) {
                 msg = m;
@@ -55,6 +74,8 @@ public class QueueEnvironment {
         return SystemErrorsBinder.OK_STATUS;
     }
 
+    // method to calculate the queue dimension
+    // @return MegaBytes dimension of the queue
     public Long getQueueMemoryDimension() {
         Long dimension = 0L;
         for (var item : this.queue) {
@@ -65,10 +86,12 @@ public class QueueEnvironment {
     }
 
     public void setDirtyBitToFalse() {
+        // no more logs can be added
         this.dirtyBit = false;
     }
 
     public void setDirtyBitToTrue() {
+        // new logs can be added
         this.dirtyBit = true;
     }
 }
