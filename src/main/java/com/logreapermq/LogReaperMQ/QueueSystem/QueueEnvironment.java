@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.logreapermq.LogReaperMQ.Registry.Subscriber;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 
 // this class manage the log queues
@@ -17,6 +18,8 @@ public class QueueEnvironment {
     // dirtyBit -> true = new messages can be added
     // dirtyBit -> false = the queue is full of messages
     private Boolean dirtyBit;
+    private Boolean subscriberCallBackMethod;
+    private Set<Subscriber> subscribersHostAndPort;
     
     // queue name. The names must be identical to those given by SubTopicTypes
     private String queueName;
@@ -25,6 +28,7 @@ public class QueueEnvironment {
         this.queue = new HashSet<>();
         this.queueName = name;
         this.dirtyBit = true;
+        this.subscribersHostAndPort = new HashSet<>();
     }
 
     // method to add new logs to the queue
@@ -39,12 +43,31 @@ public class QueueEnvironment {
         return SystemErrorsBinder.OK_STATUS;
     }
 
+    public void addSubscriber(final String host, final Integer port) {
+        this.subscribersHostAndPort.add(new Subscriber(host, port));
+    }
+
+    public SystemErrorsBinder deleteSubscriber(final String host, final Integer port) {
+        for (var subscriber : this.subscribersHostAndPort) {
+            if (subscriber.getHost().equals(host) && subscriber.getPort() == port) {
+                this.subscribersHostAndPort.remove(subscriber);
+            } else {
+                return SystemErrorsBinder.UNKNOWN_ITEM;
+            }
+        }
+        return SystemErrorsBinder.OK_STATUS;
+    }
+
     public String getQueueName() {
         return this.queueName;
     }
 
     public Set<Message> getMessageQueue() {
         return this.queue;
+    }
+
+    public void setSubscriberCallBackMethod(final Boolean flag) {
+        this.subscriberCallBackMethod = flag;
     }
     
     // method to delete a log message

@@ -9,86 +9,71 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
-import com.logreapermq.LogReaperMQ.Security.SystemExceptions.TooMutchTries;
 
-import java.util.HashMap;
 
 @Service
 @Scope("singleton")
 public class SubRegistry {
-    private Map<Subscriber, Registry> subcribersCallBack;
     @Autowired
     private TopicHandler handler;
-
-    public SubRegistry() {
-        this.subcribersCallBack = new HashMap<>();
-    }
     
-    public synchronized Tuple<SystemErrorsBinder, Integer> entry(final String subId, final List<String> topics, final List<String> queues) {
+    public synchronized SystemErrorsBinder entry(final String subId, final Integer subPort, final List<String> topics, final List<String> queues) {
         // check potential errors.
         SystemErrorsBinder topicOp = handler.checkTopicsForSubscribers(topics);
         SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(topics, queues);
 
         if (topicOp != SystemErrorsBinder.OK_STATUS) {
-           return new Tuple<>(topicOp, null); 
+           return topicOp; 
         }
 
         if (queueOp != SystemErrorsBinder.OK_STATUS) {
-            return new Tuple<>(queueOp, null);
+            return queueOp;
         }
 
-        Subscriber newSubscriber;
-        Integer Id;
-        try {
-            newSubscriber = new Subscriber(subId);
-            Id = newSubscriber.getId();
-        } catch (TooMutchTries e) {
-            return new Tuple<>(SystemErrorsBinder.TOO_MUTCH_TRIES, null);
+        for (var topicToSearch : topics) {
+            if (this.handler.getTopicHandler().containsKey(topicToSearch)) {
+                QueuesManager queuesToRegistry = this.handler.getTopicHandler().get(topicToSearch);
+                for (var queue : queues) {
+                    for (var queueLog : queuesToRegistry.getTopicQueues()) {
+                        if (queueLog.getQueueName().equals(queue)) {
+                            queueLog.setSubscriberCallBackMethod(true);
+                            queueLog.addSubscriber(subId, subPort);
+                        }
+                    }
+                }
+            } else {
+                return SystemErrorsBinder.UNKNOWN_TOPIC;
+            }
         }
-
-        this.subcribersCallBack.put(newSubscriber, new Registry(topics, queues));
-
-        return new Tuple<>(SystemErrorsBinder.OK_STATUS, Id);
-    }
-    
-    // delete subscriber from a topic.
-    public synchronized SystemErrorsBinder deleteEntry(final Integer id) {
-        Optional<Subscriber> toDelete = this.subcribersCallBack.entrySet().stream()
-            .map(Map.Entry::getKey)
-            .filter(k -> k.getId() == id)
-            .findFirst();
-
-        if (toDelete.isEmpty()) {
-            return SystemErrorsBinder.UNKNOWN_ITEM;
-        }
-        this.subcribersCallBack.remove(toDelete.get());
-
         return SystemErrorsBinder.OK_STATUS;
     }
+    
+    // delete subscriber from a topic queue.
+    public synchronized SystemErrorsBinder deleteEntry(final String host, final Integer port, final String topic, final String queue) {
+        SystemErrorsBinder resultOpTopicSearch = this.handler.checkTopicsForSubscribers(List.of(topic));
+        SystemErrorsBinder resultOpQueueSearch = this.handler.checkQueuesForSubscribers(List.of(topic), List.of(queue));
+        SystemErrorsBinder removeOpResult = null;
 
-    // delete a queue
-    public synchronized SystemErrorsBinder deleteQueue(final Integer id, final String queue) {
-        Optional<Subscriber> subscriber = this.subcribersCallBack.entrySet().stream()
-                .map(Map.Entry::getKey)
-                .filter(k -> k.getId() == id)
-                .findFirst();
-
-        if (subscriber.isEmpty()) {
-            return SystemErrorsBinder.UNKNOWN_ITEM;
+        if (resultOpTopicSearch != SystemErrorsBinder.OK_STATUS) {
+            return resultOpTopicSearch;
         }
 
-        for (var kv : this.subcribersCallBack.entrySet()) {
-            if (kv.getKey().getId() == id) {
-                if (kv.getValue().getQueues().remove(queue)) {
-                    return SystemErrorsBinder.OK_STATUS;
+        if (resultOpQueueSearch != SystemErrorsBinder.OK_STATUS) {
+            return resultOpQueueSearch;
+        }
+
+        if (this.handler.getTopicHandler().containsKey(topic)) {
+            QueuesManager queuesToRegistry = this.handler.getTopicHandler().get(topic);
+            for (var queueLog : queuesToRegistry.getTopicQueues()) {
+                if (queueLog.getQueueName().equals(queue)) {
+                    removeOpResult = queueLog.deleteSubscriber(host, port);
                 }
             }
         }
 
-        return SystemErrorsBinder.UNKNOWN_QUEUE;
+        return removeOpResult;
     }
-
-    
 }

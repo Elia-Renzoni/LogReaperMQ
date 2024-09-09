@@ -1,6 +1,6 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 public class Tuple<Boolean, QueueEnvironment> {

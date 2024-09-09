@@ -13,15 +13,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Getter
 @Setter
 public class SubscriberRegistryWrapper {
-    private String subscriberInfo;
+    private String subscriberHost;
+    private Integer subscriberListenPort;
     private List<String> topics;
     private List<String> queues;
     
     @JsonCreator
-    public SubscriberRegistryWrapper(@JsonProperty("id") String subscriberInfo, 
+    public SubscriberRegistryWrapper(@JsonProperty("id") String subscriberHost, 
+                             @JsonProperty("port") Integer port,
                               @JsonProperty("topics") List<String> topics, 
                               @JsonProperty("queues") List<String> queues) {
-        this.subscriberInfo = subscriberInfo;
+        this.subscriberHost = subscriberHost;
+        this.subscriberListenPort = port;
         this.topics = List.copyOf(topics);
         this.queues = List.copyOf(queues);
     }
