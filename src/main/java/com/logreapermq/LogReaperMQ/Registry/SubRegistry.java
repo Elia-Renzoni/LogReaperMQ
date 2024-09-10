@@ -33,6 +33,8 @@ public class SubRegistry {
             return queueOp;
         }
 
+        this.handler.addDirtyTopics(topics);
+
         for (var topicToSearch : topics) {
             if (this.handler.getTopicHandler().containsKey(topicToSearch)) {
                 QueuesManager queuesToRegistry = this.handler.getTopicHandler().get(topicToSearch);
@@ -64,6 +66,8 @@ public class SubRegistry {
         if (resultOpQueueSearch != SystemErrorsBinder.OK_STATUS) {
             return resultOpQueueSearch;
         }
+
+        this.handler.deleteDirtyTopics(topic);
 
         if (this.handler.getTopicHandler().containsKey(topic)) {
             QueuesManager queuesToRegistry = this.handler.getTopicHandler().get(topic);

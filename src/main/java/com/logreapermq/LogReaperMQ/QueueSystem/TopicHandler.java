@@ -129,6 +129,10 @@ public class TopicHandler {
         this.dirtyTopis.addAll(topics);
     }
 
+    public void deleteDirtyTopics(final String topic) {
+        this.dirtyTopis.remove(topic);
+    }
+
     public List<String> getDirtyTopics() {
         return this.dirtyTopis;
     }
