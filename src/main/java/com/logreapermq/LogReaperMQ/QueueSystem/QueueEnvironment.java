@@ -69,6 +69,10 @@ public class QueueEnvironment {
     public void setSubscriberCallBackMethod(final Boolean flag) {
         this.subscriberCallBackMethod = flag;
     }
+
+    public Set<Subscriber> getSubscriberHostAndPorts() {
+        return this.subscribersHostAndPort;
+    }
     
     // method to delete a log message
     // @return execution result

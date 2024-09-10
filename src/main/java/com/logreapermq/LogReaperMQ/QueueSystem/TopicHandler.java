@@ -14,6 +14,7 @@ import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 @Scope("singleton")
 public class TopicHandler {
     private Map<String, QueuesManager> mainHandler;
+    private List<String> dirtyTopis;
 
     public TopicHandler() {
         this.mainHandler = new HashMap<>();
@@ -122,6 +123,14 @@ public class TopicHandler {
         }
 
         return opResult;
+    }
+
+    public void addDirtyTopics(final List<String> topics) {
+        this.dirtyTopis.addAll(topics);
+    }
+
+    public List<String> getDirtyTopics() {
+        return this.dirtyTopis;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {
