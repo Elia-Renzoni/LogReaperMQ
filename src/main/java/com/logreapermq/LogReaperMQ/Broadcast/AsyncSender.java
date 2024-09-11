@@ -3,9 +3,8 @@ package com.logreapermq.LogReaperMQ.Broadcast;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.Set;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Async;
@@ -26,15 +25,23 @@ public class AsyncSender {
         tPool.setMaxPoolSize(10);
         tPool.setQueueCapacity(100);
         tPool.setCorePoolSize(10);
+        tPool.initialize();
         return tPool;
     }
     
     @Async("threadPoolTaskExecutor")
-    public void sendToSubscribers(final List<Message> logs, final List<Subscriber> subsribers) {
-
+    public void sendToSubscribers(final Set<Message> queue, final Set<Subscriber> subsribers) {
+        for (Message log : queue) {
+            if (log.getBroadcastSession()) {
+                for (Subscriber subInfo : subsribers) {
+                    this.sendTo(log, subInfo.getHost(), subInfo.getPort());
+                }
+                log.setBroadcastSession(false);
+            }
+        }
     }
 
-    public void sendToSubscriber(final Message message, final String host, final Integer port) {
+    public void sendTo(final Message message, final String host, final Integer port) {
         Socket conn;
         try {
             conn = new Socket(host, port);
