@@ -1,13 +1,11 @@
 package com.logreapermq.LogReaperMQ.Broadcast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.logreapermq.LogReaperMQ.QueueSystem.Message;
 import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
