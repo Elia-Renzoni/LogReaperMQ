@@ -21,10 +21,10 @@ public class Broadcasting {
     public SystemErrorsBinder broadcast() { 
        List<String> dTopics = this.topics.getDirtyTopics(); 
        for (var topic : dTopics) {
-          QueuesManager manager = this.topics.getTopicHandler().get(topic);
-          for (var queue : manager.getTopicQueues()) {
-            // TODO
-          }
+         QueuesManager manager = this.topics.getTopicHandler().get(topic);
+         for (var queue : manager.getTopicQueues()) {
+
+         }
 
        }
        return SystemErrorsBinder.OK_STATUS; 
