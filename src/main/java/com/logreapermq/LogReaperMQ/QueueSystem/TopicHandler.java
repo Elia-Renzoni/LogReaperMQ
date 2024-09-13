@@ -1,6 +1,7 @@
 package com.logreapermq.LogReaperMQ.QueueSystem;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.List;
@@ -14,10 +15,11 @@ import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 @Scope("singleton")
 public class TopicHandler {
     private Map<String, QueuesManager> mainHandler;
-    private List<String> dirtyTopis;
+    private List<String> dirtyTopics;
 
     public TopicHandler() {
         this.mainHandler = new HashMap<>();
+        this.dirtyTopics = new LinkedList<>();
     }
 
     public synchronized SystemErrorsBinder addNewTopic(final String topicName) {
@@ -126,15 +128,15 @@ public class TopicHandler {
     }
 
     public void addDirtyTopics(final List<String> topics) {
-        this.dirtyTopis.addAll(topics);
+        this.dirtyTopics.addAll(topics);
     }
 
     public void deleteDirtyTopics(final String topic) {
-        this.dirtyTopis.remove(topic);
+        this.dirtyTopics.remove(topic);
     }
 
     public List<String> getDirtyTopics() {
-        return this.dirtyTopis;
+        return this.dirtyTopics;
     }
 
     private Optional<QueuesManager> checkTopicAndGetManager(final String topicNameToSearch) {

@@ -23,11 +23,12 @@ public class SubRegistry {
     public synchronized SystemErrorsBinder entry(final String subId, final Integer subPort, final List<String> topics, final List<String> queues) {
         // check potential errors.
         SystemErrorsBinder topicOp = handler.checkTopicsForSubscribers(topics);
-        SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(topics, queues);
 
         if (topicOp != SystemErrorsBinder.OK_STATUS) {
-           return topicOp; 
+            return topicOp;
         }
+
+        SystemErrorsBinder queueOp = handler.checkQueuesForSubscribers(topics, queues);
 
         if (queueOp != SystemErrorsBinder.OK_STATUS) {
             return queueOp;
@@ -55,13 +56,14 @@ public class SubRegistry {
     
     // delete subscriber from a topic queue.
     public synchronized SystemErrorsBinder deleteEntry(final String host, final Integer port, final String topic, final String queue) {
-        SystemErrorsBinder resultOpTopicSearch = this.handler.checkTopicsForSubscribers(List.of(topic));
-        SystemErrorsBinder resultOpQueueSearch = this.handler.checkQueuesForSubscribers(List.of(topic), List.of(queue));
         SystemErrorsBinder removeOpResult = null;
+        SystemErrorsBinder resultOpTopicSearch = this.handler.checkTopicsForSubscribers(List.of(topic));
 
         if (resultOpTopicSearch != SystemErrorsBinder.OK_STATUS) {
             return resultOpTopicSearch;
         }
+
+        SystemErrorsBinder resultOpQueueSearch = this.handler.checkQueuesForSubscribers(List.of(topic), List.of(queue));
 
         if (resultOpQueueSearch != SystemErrorsBinder.OK_STATUS) {
             return resultOpQueueSearch;
