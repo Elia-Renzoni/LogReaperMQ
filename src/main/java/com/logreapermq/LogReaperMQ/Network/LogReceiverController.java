@@ -2,7 +2,6 @@ package com.logreapermq.LogReaperMQ.Network;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +22,7 @@ import com.logreapermq.LogReaperMQ.Wrappers.LogMessageWrapper;
 // payloads in a json fashion.
 
 @RestController
-@RequestMapping(path = "reapermq/logs")
+@RequestMapping(path = "reapermq/logs", produces = "application/json")
 public class LogReceiverController {
     @Autowired
     private TopicHandler handler;

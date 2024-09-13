@@ -16,13 +16,13 @@ import com.logreapermq.LogReaperMQ.Security.SystemExceptions.UnknownTopic;
 // queues and topics by publishers
 
 @RestController
-@RequestMapping(path = "reapermq/breaker")
+@RequestMapping(path = "reapermq/breaker", produces = "application/json")
 public class TopicReaperController {
     @Autowired
     private TopicHandler queueHolder;
     
     @DeleteMapping("/{topicName}")
-    public ResponseEntity<Void> deleteTopic(@PathVariable String topicName) throws RuntimeException {
+    public ResponseEntity<Void> deleteTopic(@PathVariable(name = "topicName") String topicName) throws RuntimeException {
         SystemErrorsBinder opResult = queueHolder.deleteTopic(topicName);
         if (opResult == SystemErrorsBinder.UNKNOWN_TOPIC) {
             throw new UnknownTopic("The Topic" + topicName + " doesn't exist in the system");
@@ -32,7 +32,7 @@ public class TopicReaperController {
     }
 
     @DeleteMapping("/{topicName}/{queueName}")
-    public ResponseEntity<Void> deleteQueue(@PathVariable String topicName, @PathVariable String queueName) throws RuntimeException {
+    public ResponseEntity<Void> deleteQueue(@PathVariable(name = "topicName") String topicName, @PathVariable(name = "queueName") String queueName) throws RuntimeException {
         SystemErrorsBinder opResult = queueHolder.deleteQueue(topicName, queueName);
         if (opResult == SystemErrorsBinder.UNKNOWN_QUEUE) {
             throw new UnknownQueue("The Queue " + queueName + " doesn't exist in the system");

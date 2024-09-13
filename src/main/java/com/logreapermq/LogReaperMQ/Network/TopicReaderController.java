@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 // to a single topic and to the many queues of that topic.
 
 @RestController
-@RequestMapping(path = "reapermq/subscribers")
+@RequestMapping(path = "reapermq/subscribers", produces = "application/json")
 public class TopicReaderController {
 
     @Autowired
@@ -56,7 +56,10 @@ public class TopicReaderController {
 
     // de-registration of the subscriber form a specific queue
     @DeleteMapping("/deregister/{id}/{port}/{topic}/{queue}")
-    public ResponseEntity<Void> deregisterFromQueue(@PathVariable String id, @PathVariable Integer port, @PathVariable String topic, @PathVariable String queue) throws RuntimeException {
+    public ResponseEntity<Void> deregisterFromQueue(@PathVariable(name = "id") String id, 
+                                                    @PathVariable(name = "port") Integer port, 
+                                                    @PathVariable(name = "topic") String topic, 
+                                                    @PathVariable(name = "queue") String queue) throws RuntimeException {
         SystemErrorsBinder op = registrer.deleteEntry(id, port, topic, queue);
         if (op == SystemErrorsBinder.UNKNOWN_ITEM) {
             throw new UnknownItem("Unknown Subscriber!");
