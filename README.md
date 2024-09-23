@@ -19,9 +19,9 @@ The QueueEnvironment class contains a queue that is identified by its name, the 
 * List of registered subscribers -> when a subscriber wants to register, it is added to the list of subscribers.
 Obviously these attributes are followed by methods to manipulate them. <br>
 
-The QueuesManager class is responsible for keeping a list of queues to manage, in fact it is responsible for adding and removing queues.
+The QueuesManager class is responsible for keeping a list of queues to manage, in fact it is responsible for adding and removing queues. <br> <br>
 
-
+Subscribers to register must contact the correct enpoint and pass as body of the request the host and port. If a subcriber wants to register, he must pass a list of topics and queues to which his call back method should be attached, the goal is to search in the hash map for topics and then the subsequent queues to insert the subscriber’s name in the list of subscribers explained above, obviously changing the flag indicating the recording of the call back methods. <br> LogReaperMQ uses a method other than polling to avoid receiving too many messages that would render the system unusable.
 ## Publisher Guide
 
 ## Subscriber Guide
