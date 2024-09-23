@@ -10,8 +10,16 @@ LogReaperMQ use a lot of Hash Maps and Hash Sets to provide O(1) operations. The
 <img width="403" alt="hash" src="https://github.com/user-attachments/assets/3d723c8e-fc0b-4b32-964f-58920d2c2194"> <br>
 The keys consist of the topics name, which are the name of microservices that want to store their logs. The values consist of an instance of the class that manage all the queue referred to a topic. Using this Hash Map we can search, add and remove queues by looking to the topic name. <br> <br>
 
-The queues must be of the valid type. These are INFO, WARN, DEBUG, FATAL, ERROR and TRACE. If the subscribers want to create or add new logs to a queue that are not of the intended type, then they will receive an error.
+The queues must be of the valid type. These are INFO, WARN, DEBUG, FATAL, ERROR and TRACE. If the subscribers want to create or add new logs to a queue that are not of the intended type, then they will receive an error. <br>
 
+The classes that handle queues are QueuesManager and QueueEnvironment, the last one contains a single queue, while the first one contains a set of queues that manage. <br>
+The QueueEnvironment class contains a queue that is identified by its name, the queue also has additional information such as:
+* dirty bit -> which is a boolean indicating if the queue is too full or not.
+* dirty bit for call back methods -> if subcribers register to a queue, set the dirty bit to true, otherwise false. This will help research operations.
+* List of registered subscribers -> when a subscriber wants to register, it is added to the list of subscribers.
+Obviously these attributes are followed by methods to manipulate them. <br>
+
+The QueuesManager class is responsible for keeping a list of queues to manage, in fact it is responsible for adding and removing queues.
 
 
 ## Publisher Guide
