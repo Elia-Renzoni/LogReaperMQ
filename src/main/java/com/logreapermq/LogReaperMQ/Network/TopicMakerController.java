@@ -32,7 +32,7 @@ public class TopicMakerController {
     public ResponseEntity<Object> createTopic(@Valid @RequestBody TopicMakerWrapper requestBody) throws RuntimeException {
         SystemErrorsBinder operationResult = queueHolder.addNewTopic(requestBody.getTopic()); 
 
-        if (operationResult == SystemErrorsBinder.TOO_MUCH_ELEMENTS) {
+        if (operationResult == SystemErrorsBinder.TOO_MUTCH_ELEMENTS) {
             throw new TooMutchElements("The Topic Handler has too element");
         } else if (operationResult == SystemErrorsBinder.TOPIC_ALREADY_EXIST) {
             throw new TopicAlreadyExist("The Topic " + requestBody.getTopic() + " alredy exist in the system");

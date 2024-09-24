@@ -24,7 +24,6 @@ public class AsyncQueuesDimControllers {
 
         return tPool;
     }
-
     
     @Async("threadPoolTaskExecutor")
     public void checkQueueDimension(final String topic, Map<String, QueuesManager> queueHandler) {
