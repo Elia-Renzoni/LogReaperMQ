@@ -3,6 +3,7 @@ package com.logreapermq.LogReaperMQ.Broadcast;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -10,6 +11,7 @@ import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 import com.logreapermq.LogReaperMQ.Security.SystemErrorsBinder;
 
+@Configuration
 @EnableScheduling
 public class Broadcasting {
     @Autowired
@@ -17,8 +19,9 @@ public class Broadcasting {
     @Autowired
     private AsyncSender sender;
     
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedDelay = 2000, initialDelay = 2000)
     public SystemErrorsBinder broadcast() { 
+       System.out.println("Broadcast on...");
        List<String> dTopics = this.topics.getDirtyTopics(); 
 
        for (var topic : dTopics) {

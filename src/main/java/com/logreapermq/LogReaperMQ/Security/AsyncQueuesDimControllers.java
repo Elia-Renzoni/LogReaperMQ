@@ -17,9 +17,9 @@ public class AsyncQueuesDimControllers {
     @Bean(name = "threadPoolTaskExecutor")
     public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor tPool = new ThreadPoolTaskExecutor();
-        tPool.setMaxPoolSize(10);
-        tPool.setQueueCapacity(100);
-        tPool.setCorePoolSize(10);
+        tPool.setMaxPoolSize(150);
+        tPool.setQueueCapacity(150);
+        tPool.setCorePoolSize(150);
         tPool.initialize();
 
         return tPool;
