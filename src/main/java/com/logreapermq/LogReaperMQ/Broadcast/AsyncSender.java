@@ -7,6 +7,7 @@ import java.util.concurrent.Executor;
 import java.util.Set;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -16,10 +17,11 @@ import com.logreapermq.LogReaperMQ.Registry.Subscriber;
 
 // Best-Effort Broadcast Implementation for LogReaperMQ
 // the algorithm execut apart of the main thread pool
+@Configuration
 @EnableAsync
 public class AsyncSender {
    
-    @Bean(name = "threadPoolTaskExecutor")
+    @Bean(name = "threadPoolTaskExecutorBroadcast")
     public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor tPool = new ThreadPoolTaskExecutor();
         tPool.setMaxPoolSize(10);
@@ -29,7 +31,7 @@ public class AsyncSender {
         return tPool;
     }
     
-    @Async("threadPoolTaskExecutor")
+    @Async("threadPoolTaskExecutorBroadcast")
     public void sendToSubscribers(final Set<Message> queue, final Set<Subscriber> subsribers) {
         for (Message log : queue) {
             if (log.getBroadcastSession()) {
