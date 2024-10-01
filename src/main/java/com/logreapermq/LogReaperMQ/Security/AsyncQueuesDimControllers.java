@@ -14,7 +14,7 @@ import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 @Configuration
 @EnableAsync
 public class AsyncQueuesDimControllers {
-    private final static Long MAX_DIM = 5_000_000L; 
+    private final static Long MAX_DIM = 1_000_000L; 
 
     @Bean(name = "threadPoolTaskExecutor")
     public Executor threadPoolTaskExecutor() {

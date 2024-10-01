@@ -74,35 +74,20 @@ public class QueueEnvironment {
         return this.subscribersHostAndPort;
     }
     
-    // method to delete a log message
+    // method to delete a log message that are false
     // @return execution result
     // @param log to delete
-    public SystemErrorsBinder deleteItem(final String item) {
-        
-        // check if the log message exist in the queue
-        Boolean op = this.queue.stream()
-            .anyMatch(n -> n.getMessage().equals(item));
-        
-        if (!(op)) {
-            return SystemErrorsBinder.UNKNOWN_ITEM;
-        }
-        
-        Message msg = null;
-        
-        // return the message to delete
-        for (Message m : this.queue) {
-            if (m.getMessage().equals(item)) {
-                msg = m;
-                break;
+    public SystemErrorsBinder deleteItems() {
+        for (var logMessage : this.queue) {
+            if (!(logMessage.getBroadcastSession())) {
+                this.queue.remove(logMessage);
             }
         }
-        
-        this.queue.remove(msg);
         return SystemErrorsBinder.OK_STATUS;
     }
 
     // method to calculate the queue dimension
-    // @return MegaBytes dimension of the queue
+    // @return MegaBytes dimension of the queue in bytes
     public Long getQueueMemoryDimension() {
         Long dimension = 0L;
         for (var item : this.queue) {

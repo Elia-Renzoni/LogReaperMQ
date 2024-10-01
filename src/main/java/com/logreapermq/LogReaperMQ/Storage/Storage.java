@@ -1,24 +1,24 @@
 package com.logreapermq.LogReaperMQ.Storage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
+
 /*
- * TODO:
- * Aaggiungere metodo di scheduling per prendere
- * le code con dimensione massima raggiunta e memorizzarle
- * su un database mongoDB.
- * una volta memorizzate posso eliminare gli elementi 
- * vecchi nella coda.
+ * Storage System
  */
 @EntityScan
 @EnableScheduling
 public class Storage {
+    @Autowired
+    private TopicHandler handler;
 
-    @Scheduled(fixedRate = 1000000)
+    @Scheduled(fixedRate = 10000)
     public void storeQueue() {
+        System.out.println("Storage System on...");
 
     }
-    
 }
