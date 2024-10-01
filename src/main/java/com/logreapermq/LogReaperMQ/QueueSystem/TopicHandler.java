@@ -17,6 +17,8 @@ public class TopicHandler {
     private Map<String, QueuesManager> mainHandler;
     private List<String> dirtyTopics;
 
+    private static final Integer MAX_TOPICS = 300; 
+
     public TopicHandler() {
         this.mainHandler = new HashMap<>();
         this.dirtyTopics = new LinkedList<>();
@@ -25,6 +27,10 @@ public class TopicHandler {
     public synchronized SystemErrorsBinder addNewTopic(final String topicName) {
         Boolean isTopicAlreadyPresent = this.checkTopicName(topicName);
         
+        if (this.mainHandler.size() >= TopicHandler.MAX_TOPICS) {
+            return SystemErrorsBinder.TOO_MUTCH_ELEMENTS;
+        }
+
         if (isTopicAlreadyPresent) {
             return SystemErrorsBinder.TOPIC_ALREADY_EXIST;
         }
@@ -148,8 +154,6 @@ public class TopicHandler {
     }
     
     private Boolean checkTopicName(final String topicNametoSearch) {
-        return this.mainHandler.entrySet().stream()
-            .map(Map.Entry::getKey)
-            .anyMatch(k -> k.contains(topicNametoSearch));
+        return this.mainHandler.containsKey(topicNametoSearch);
     }
 }

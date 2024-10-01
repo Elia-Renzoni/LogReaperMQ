@@ -36,7 +36,7 @@ public class QueuesManager {
         }
 
         if (isTopicAlreadyExist) {
-            return SystemErrorsBinder.QUEUE_TYPE_ALREADY_EXSIT;
+            return SystemErrorsBinder.QUEUE_TYPE_ALREADY_EXIST;
         }
 
         this.topicQueues.add(new QueueEnvironment(queueType));

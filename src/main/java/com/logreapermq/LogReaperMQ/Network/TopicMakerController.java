@@ -36,7 +36,7 @@ public class TopicMakerController {
             throw new TooMutchElements("The Topic Handler has too element");
         } else if (operationResult == SystemErrorsBinder.TOPIC_ALREADY_EXIST) {
             throw new TopicAlreadyExist("The Topic " + requestBody.getTopic() + " alredy exist in the system");
-        }
+        } 
         return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Content-Type", "application/json")
                     .body("The topic" + requestBody.getTopic() + " has been created succesfully");
@@ -48,7 +48,7 @@ public class TopicMakerController {
 
         if (operationResult == SystemErrorsBinder.INVALID_QUEUE_TYPE) {
             throw new InvalidQueueType("The Queue Type Is Not Valid for the System");
-        } else if (operationResult == SystemErrorsBinder.QUEUE_TYPE_ALREADY_EXSIT) {
+        } else if (operationResult == SystemErrorsBinder.QUEUE_TYPE_ALREADY_EXIST) {
             throw new QueueTypeAlreadyExist("The Queue Already Exist in the System");
         }
         return ResponseEntity.status(HttpStatus.CREATED)
