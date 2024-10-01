@@ -25,3 +25,5 @@ Subscribers to register must contact the correct enpoint and pass as body of the
 ## Publisher Guide
 
 ## Subscriber Guide
+
+## Metrics and Performaces
