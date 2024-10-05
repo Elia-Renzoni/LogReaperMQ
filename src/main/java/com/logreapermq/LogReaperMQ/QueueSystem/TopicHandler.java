@@ -133,15 +133,15 @@ public class TopicHandler {
         return opResult;
     }
 
-    public void addDirtyTopics(final List<String> topics) {
+    public synchronized void addDirtyTopics(final List<String> topics) {
         this.dirtyTopics.addAll(topics);
     }
 
-    public void deleteDirtyTopics(final String topic) {
+    public synchronized void deleteDirtyTopics(final String topic) {
         this.dirtyTopics.remove(topic);
     }
 
-    public List<String> getDirtyTopics() {
+    public synchronized List<String> getDirtyTopics() {
         return this.dirtyTopics;
     }
 
