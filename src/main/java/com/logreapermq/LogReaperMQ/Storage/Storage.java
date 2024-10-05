@@ -29,15 +29,13 @@ public class Storage {
         // TODO: Storage...
         Set<String> keys = this.handler.getTopicHandler().keySet();
         List<QueuesManager> managers = new LinkedList<>();
-        Integer logicalCounter = 0;
         
         /*
          * assign each thread three different topics
          */
         for (var key : keys) {
-            ++logicalCounter;
             managers.add(this.handler.getTopicHandler().get(key));
-            if (logicalCounter == 3) {
+            if (managers.size() == 3) {
                 // create the thread
                 this.asyncStorageWorkers.storeAndDelete(managers);
                 managers.clear();

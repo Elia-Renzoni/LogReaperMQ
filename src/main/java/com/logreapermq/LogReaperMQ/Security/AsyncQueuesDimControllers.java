@@ -2,6 +2,7 @@ package com.logreapermq.LogReaperMQ.Security;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,22 +20,20 @@ public class AsyncQueuesDimControllers {
     @Bean(name = "threadPoolTaskExecutor")
     public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor tPool = new ThreadPoolTaskExecutor();
-        tPool.setMaxPoolSize(150);
-        tPool.setQueueCapacity(150);
-        tPool.setCorePoolSize(150);
+        tPool.setMaxPoolSize(101);
+        tPool.setQueueCapacity(101);
+        tPool.setCorePoolSize(101);
         tPool.initialize();
 
         return tPool;
     }
     
     @Async("threadPoolTaskExecutor")
-    public void checkQueueDimension(final String topic, Map<String, QueuesManager> queueHandler) {
-        QueuesManager manager = (QueuesManager) queueHandler.entrySet().stream()
-            .filter(n -> n.getKey().equals(topic))
-            .map(Map.Entry::getValue);
-        
-        manager.getTopicQueues().stream()
-            .filter(q -> q.getQueueMemoryDimension() >= AsyncQueuesDimControllers.MAX_DIM)
-            .forEach(q -> q.setDirtyBitToFalse());
+    public void checkQueueDimension(final List<QueuesManager> queueHandler) {
+        for (var manager : queueHandler) {
+            manager.getTopicQueues().stream()
+                .filter(q -> q.getQueueMemoryDimension() >= AsyncQueuesDimControllers.MAX_DIM)
+                .forEach(q -> q.setDirtyBitToFalse());
+        }
     }
 }
