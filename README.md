@@ -21,7 +21,11 @@ Obviously these attributes are followed by methods to manipulate them. <br>
 
 The QueuesManager class is responsible for keeping a list of queues to manage, in fact it is responsible for adding and removing queues. <br> <br>
 
-Subscribers to register must contact the correct enpoint and pass as body of the request the host and port. If a subcriber wants to register, he must pass a list of topics and queues to which his call back method should be attached, the goal is to search in the hash map for topics and then the subsequent queues to insert the subscriber’s name in the list of subscribers explained above, obviously changing the flag indicating the recording of the call back methods. <br> LogReaperMQ uses a method other than polling to avoid receiving too many messages that would render the system unusable.
+Subscribers to register must contact the correct enpoint and pass as body of the request the host and port. If a subcriber wants to register, he must pass a list of topics and queues to which his call back method should be attached, the goal is to search in the hash map for topics and then the subsequent queues to insert the subscriber’s name in the list of subscribers explained above, obviously changing the flag indicating the recording of the call back methods. <br> LogReaperMQ uses a method other than polling to avoid receiving too many messages that would render the system unusable. <br> <br>
+LogReaperMQ can contain a maximum of 300 topics, thanks to this limitation it is possible to perform more deterministic queuing, storage and broadcast operations. <br><br>
+
+Using the MongoDB database you can store the queues in a persistent way, this will be the basis to implement an algorithm of crash recovery in the future. Each storage operation is followed by a removal operation of those messages that have the broadcast session flag set to false.
+
 ## Publisher Guide
 
 ## Subscriber Guide
