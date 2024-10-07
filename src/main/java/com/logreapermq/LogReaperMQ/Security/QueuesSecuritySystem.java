@@ -22,7 +22,7 @@ public class QueuesSecuritySystem {
     @Autowired
     private AsyncQueuesDimControllers asyncQueueController;
 
-    @Scheduled(fixedDelay = 10000, initialDelay = 10000)
+    @Scheduled(fixedDelay = 9000, initialDelay = 9000)
     public void checkQueuesDimension() {
         System.out.println("Security System on...");
         Set<String> topics = this.topicManager.getTopicHandler().keySet();

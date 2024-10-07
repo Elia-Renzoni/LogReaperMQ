@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -15,7 +16,7 @@ import com.logreapermq.LogReaperMQ.QueueSystem.TopicHandler;
 /*
  * Storage System
  */
-@EntityScan
+@Configuration
 @EnableScheduling
 public class Storage {
     @Autowired
@@ -23,7 +24,7 @@ public class Storage {
     @Autowired
     private AsyncStorage asyncStorageWorkers;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedDelay = 10000, initialDelay = 10000)
     public void storeQueue() {
         System.out.println("Storage System on...");
         // TODO: Storage...

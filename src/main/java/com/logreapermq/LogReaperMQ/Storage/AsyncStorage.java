@@ -15,7 +15,7 @@ import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 @EnableAsync
 public class AsyncStorage {
 
-    @Bean(name = "threadPoolTaskExecutor")
+    @Bean(name = "threadPoolTaskExecutorStorage")
     public Executor storageTaskExecutor() {
         ThreadPoolTaskExecutor tPool = new ThreadPoolTaskExecutor();
         tPool.setMaxPoolSize(101);
@@ -24,7 +24,7 @@ public class AsyncStorage {
         return tPool;
     }
 
-    @Async("threadPoolTaskExecutor")
+    @Async("threadPoolTaskExecutorStorage")
     public void storeAndDelete(final List<QueuesManager> managers) {
         for (var toDelete : managers) {
             for (var queues : toDelete.getTopicQueues()) {
