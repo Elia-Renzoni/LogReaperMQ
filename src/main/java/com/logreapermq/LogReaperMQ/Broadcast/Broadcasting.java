@@ -1,5 +1,6 @@
 package com.logreapermq.LogReaperMQ.Broadcast;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,19 @@ public class Broadcasting {
     public SystemErrorsBinder broadcast() { 
        System.out.println("Broadcast on...");
        List<String> dTopics = this.topics.getDirtyTopics(); 
+       List<QueuesManager> managers = new LinkedList<>();
 
+        /*
+         * assign each thread three different topics
+         */
        for (var topic : dTopics) {
-          QueuesManager manager = this.topics.getTopicHandler().get(topic);
-          for (var queue : manager.getTopicQueues()) {
-              this.sender.sendToSubscribers(queue.getMessageQueue(), queue.getSubscriberHostAndPorts());
-          }
+            managers.add(this.topics.getTopicHandler().get(topic));
+            if (managers.size() == 3) {
+                this.sender.sendToSubscribers(managers);
+                managers.clear();
+            }
        }
+
        return SystemErrorsBinder.OK_STATUS; 
     }
 }
