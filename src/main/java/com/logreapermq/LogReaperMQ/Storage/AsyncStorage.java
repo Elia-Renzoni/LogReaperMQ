@@ -27,6 +27,7 @@ public class AsyncStorage {
     @Async("threadPoolTaskExecutorStorage")
     public void storeAndDelete(final List<QueuesManager> managers) {
         for (var toDelete : managers) {
+            // store data
             for (var queues : toDelete.getTopicQueues()) {
                 queues.deleteItems();
             }

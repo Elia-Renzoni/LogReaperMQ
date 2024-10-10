@@ -27,7 +27,7 @@ public class Storage {
     @Scheduled(fixedDelay = 10000, initialDelay = 10000)
     public void storeQueue() {
         System.out.println("Storage System on...");
-        // TODO: Storage...
+
         Set<String> keys = this.handler.getTopicHandler().keySet();
         List<QueuesManager> managers = new LinkedList<>();
         
