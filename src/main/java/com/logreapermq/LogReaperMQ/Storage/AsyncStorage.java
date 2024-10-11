@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -25,11 +24,17 @@ public class AsyncStorage {
         return tPool;
     }
 
+    /*
+     * devo memorizzare le code con le seguenti informazioni:
+     * - id coda.
+     * - nome del topic di riferimento.
+     * - nome della coda.
+     * - logs.
+     */
     @Async("threadPoolTaskExecutorStorage")
-    public void storeAndDelete(final List<QueuesManager> managers) {
+    public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
         for (var toDelete : managers) {
-            for (var queues : toDelete.getTopicQueues()) {
-                
+            for (var queues : toDelete.getManager().getTopicQueues()) {
                 queues.deleteItems();
             }
         }
