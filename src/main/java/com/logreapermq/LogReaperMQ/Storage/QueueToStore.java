@@ -16,5 +16,7 @@ import lombok.Setter;
 public class QueueToStore {
     @Id
     private Integer queueId;
+    private String topicName;
+    private String queueName;
     private Set<String> logs;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -27,8 +28,8 @@ public class AsyncStorage {
     @Async("threadPoolTaskExecutorStorage")
     public void storeAndDelete(final List<QueuesManager> managers) {
         for (var toDelete : managers) {
-            // store data
             for (var queues : toDelete.getTopicQueues()) {
+                
                 queues.deleteItems();
             }
         }
