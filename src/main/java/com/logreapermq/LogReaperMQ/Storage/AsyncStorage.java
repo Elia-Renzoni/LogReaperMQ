@@ -26,11 +26,6 @@ public class AsyncStorage {
     }
 
     /*
-     * devo memorizzare le code con le seguenti informazioni:
-     * - id coda.
-     * - nome del topic di riferimento.
-     * - nome della coda.
-     * - logs.
      */
     @Async("threadPoolTaskExecutorStorage")
     public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
