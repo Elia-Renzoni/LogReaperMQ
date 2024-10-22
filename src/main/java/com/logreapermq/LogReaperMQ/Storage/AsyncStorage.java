@@ -14,7 +14,9 @@ import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
 @Configuration
 @EnableAsync
 public class AsyncStorage {
-    private QueueToStore queueDocumentTemplate;
+    @Autowired
+    private QueueRepository storeData;
+    private QueueToStore mongoQueue;
 
     @Bean(name = "threadPoolTaskExecutorStorage")
     public Executor storageTaskExecutor() {
@@ -31,10 +33,8 @@ public class AsyncStorage {
     public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
         for (var toDelete : managers) {
             for (var queues : toDelete.getManager().getTopicQueues()) {
-                this.queueDocumentTemplate = new QueueToStore(2,  
-                                                    toDelete.getTopicOfManager(), 
-                                                            queues.getQueueName(), 
-                                                                List.of(queues.getMessageQueue()));
+                this.mongoQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()))
+                this.storeData.save(this.mongoQueue)
                 queues.deleteItems();
             }
         }
