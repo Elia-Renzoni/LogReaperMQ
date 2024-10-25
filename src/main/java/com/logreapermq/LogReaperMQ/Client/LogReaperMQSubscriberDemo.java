@@ -7,7 +7,7 @@ import java.net.Socket;
 public class LogReaperMQSubscriberDemo {
     public static void main(String... args) {
         // listening and printing logs
-        private ServerSocket conn = new ServerSocket(5600);
+        ServerSocket conn = new ServerSocket(5600);
         try {
             while (true) {
                 Socket net = conn.accept();
