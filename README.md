@@ -27,7 +27,45 @@ LogReaperMQ can contain a maximum of 300 topics, thanks to this limitation it is
 Using the MongoDB database you can store the queues in a persistent way, this will be the basis to implement an algorithm of crash recovery in the future. Each storage operation is followed by a removal operation of those messages that have the broadcast session flag set to false.
 
 ## Publisher Guide
+In this section are published API contracts through which publishers can create topics, code and send logs. <br>
+* creating a new topic:<br>
+```json
+{
+  "topic": "topic name"
+}
+```
+* creation of new queues associated with the topics: <br>
+```json
+{
+  "topic": "topic name",
+  "queue": "queue name"
+}
+```
+* adding a new log: <br>
+```json
+{
+  "message": "log content",
+  "topic": "topic name",
+  "queue": "queue name"
+}
+```
 
 ## Subscriber Guide
+In this section are published the API contracts through which subcribers can register to receive the desired logs. <br>
+* registration: <br>
+```json
+{
+  "id": "host",
+  "port": 5050,
+  "topics": [
+      "topic name1",
+      "topic nameN",
+  ],
+  "queues": [
+      "queue name1",
+      "queue nameN",
+  ]
+}
+```
 
 ## Metrics and Performaces
