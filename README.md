@@ -67,5 +67,3 @@ In this section are published the API contracts through which subcribers can reg
   ]
 }
 ```
-
-## Metrics and Performaces
