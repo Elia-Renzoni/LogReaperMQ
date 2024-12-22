@@ -7,7 +7,13 @@ import java.net.Socket;
 public class LogReaperMQSubscriberDemo {
     public static void main(String... args) {
         // listening and printing logs
-        ServerSocket conn = new ServerSocket(5600);
+        ServerSocket conn = null;
+        try {
+            conn = new ServerSocket(5600);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         try {
             while (true) {
                 Socket net = conn.accept();

@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.logreapermq.LogReaperMQ.QueueSystem.QueuesManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableAsync
@@ -33,8 +34,8 @@ public class AsyncStorage {
     public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
         for (var toDelete : managers) {
             for (var queues : toDelete.getManager().getTopicQueues()) {
-                this.mongoQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()))
-                this.storeData.save(this.mongoQueue)
+                this.mongoQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()));
+                this.storeData.save(this.mongoQueue);
                 queues.deleteItems();
             }
         }
