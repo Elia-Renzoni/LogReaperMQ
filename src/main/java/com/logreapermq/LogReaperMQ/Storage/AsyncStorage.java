@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Configuration
 @EnableAsync
 public class AsyncStorage {
+    private QueueToStore serQueue;
     @Autowired
-    private QueueRepository storeData;
-    private QueueToStore mongoQueue;
+    private FileWrapper store;
 
     @Bean(name = "threadPoolTaskExecutorStorage")
     public Executor storageTaskExecutor() {
@@ -34,8 +34,8 @@ public class AsyncStorage {
     public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
         for (var toDelete : managers) {
             for (var queues : toDelete.getManager().getTopicQueues()) {
-                this.mongoQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()));
-                this.storeData.save(this.mongoQueue);
+                this.serQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()));
+                // TODO this.store.savePermanently(this.serQueue);
                 queues.deleteItems();
             }
         }
