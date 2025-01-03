@@ -35,7 +35,7 @@ public class AsyncStorage {
         for (var toDelete : managers) {
             for (var queues : toDelete.getManager().getTopicQueues()) {
                 this.serQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()));
-                // TODO this.store.savePermanently(this.serQueue);
+                this.store.storeQueue(this.serQueue.getTopicName(), this.serQueue.getQueueName(), this.serQueue.getLogs());
                 queues.deleteItems();
             }
         }

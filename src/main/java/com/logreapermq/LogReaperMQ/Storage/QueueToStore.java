@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QueueToStore {
-    private Integer queueId;
     private String topicName;
     private String queueName;
     private List<Set<Message>> logs;
