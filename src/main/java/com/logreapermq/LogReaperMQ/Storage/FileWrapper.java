@@ -27,6 +27,7 @@ public class FileWrapper {
 
       try {
          this.store.write(serSystem);
+         this.store.close();
       } catch (IOException e) {
          e.printStackTrace();
       }

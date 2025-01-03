@@ -15,6 +15,7 @@ public class LogReaperMQSubscriberDemo {
             e.printStackTrace();
         }
         try {
+            System.out.println("Listening...");
             while (true) {
                 Socket net = conn.accept();
                 System.out.println(net.getInputStream().read());
