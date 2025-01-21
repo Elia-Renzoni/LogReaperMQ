@@ -1,0 +1,8 @@
+
+microservice-name - INFO - null
+microservice-name - INFO - null
+microservice-name - INFO - nullfoo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	
+microservice-name - INFO - nullfoo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	
+microservice-name - INFO - nullfoo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	
+microservice-name - INFO - nullfoo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	
+microservice-name - INFO - nullfoo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	foo	

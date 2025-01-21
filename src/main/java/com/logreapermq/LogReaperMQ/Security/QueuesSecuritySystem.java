@@ -33,7 +33,7 @@ public class QueuesSecuritySystem {
          */
         for (var topicToCheck : topics) {
             managers.add(this.topicManager.getTopicHandler().get(topicToCheck));
-            if (managers.size() == 3) {
+            if (managers.size() >= 3) {
                 this.asyncQueueController.checkQueueDimension(managers);
                 managers.clear();
             }

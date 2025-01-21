@@ -32,9 +32,10 @@ public class AsyncStorage {
      */
     @Async("threadPoolTaskExecutorStorage")
     public void storeAndDelete(final List<ManagersPairStructure<QueuesManager, String>> managers) {
+        System.out.println("Sto Venendo Eseguito!!");
         for (var toDelete : managers) {
             for (var queues : toDelete.getManager().getTopicQueues()) {
-                this.serQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), List.of(queues.getMessageQueue()));
+                this.serQueue = new QueueToStore(toDelete.getTopicOfManager(), queues.getQueueName(), queues.getMessageQueue());
                 this.store.storeQueue(this.serQueue.getTopicName(), this.serQueue.getQueueName(), this.serQueue.getLogs());
                 queues.deleteItems();
             }
