@@ -36,6 +36,7 @@ public class AsyncSender {
     
     @Async("threadPoolTaskExecutorBroadcast")
     public void sendToSubscribers(final List<QueuesManager> managers) {
+        System.out.println("Sono Attivo!!");
         for (QueuesManager manager : managers) {
             for (QueueEnvironment qEnv : manager.getTopicQueues()) {
                 for (Message msg : qEnv.getMessageQueue()) {
@@ -59,7 +60,7 @@ public class AsyncSender {
 
             conn.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 }
