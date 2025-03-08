@@ -37,6 +37,10 @@ public class QueuesSecuritySystem {
                 this.asyncQueueController.checkQueueDimension(managers);
                 managers.clear();
             }
+
+            if (topics.size() == 1) {
+                this.asyncQueueController.checkQueueDimension(managers);   
+            }
         }
     }
 }

@@ -36,13 +36,14 @@ public class Storage {
          */
         for (var key : keys) {
             managers.add(new ManagersPairStructure<QueuesManager,String>(this.handler.getTopicHandler().get(key), key));
-            /*if (managers.size() >= 3) {
+            if (managers.size() >= 3) {
                 // create the thread
                 this.asyncStorageWorkers.storeAndDelete(managers);
                 managers.clear();
-            }*/
-            this.asyncStorageWorkers.storeAndDelete(managers);
+            }
+
+            if (keys.size() == 1) 
+                this.asyncStorageWorkers.storeAndDelete(managers);
         }
-        System.out.println("Pippo Pluto!");
     }
 }
