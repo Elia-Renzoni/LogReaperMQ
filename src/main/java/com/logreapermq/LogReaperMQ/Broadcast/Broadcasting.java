@@ -31,11 +31,14 @@ public class Broadcasting {
          */
        for (var topic : dTopics) {
             managers.add(this.topics.getTopicHandler().get(topic));
-            /*if (managers.size() == 3) {
+            if (managers.size() == 3) {
                 this.sender.sendToSubscribers(managers);
                 managers.clear();
-            }*/
-            this.sender.sendToSubscribers(managers);
+            }
+
+            // if the list is made by only one topic
+            if (dTopics.size() == 1) 
+                this.sender.sendToSubscribers(managers);
        }
 
        return SystemErrorsBinder.OK_STATUS; 
